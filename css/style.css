@@ -1356,3 +1356,25 @@ input, textarea { caret-color: var(--red); }
 
 /* v2.1 新域名较长，二维码下网址允许换行 */
 .qr-url{overflow-wrap:anywhere;}
+
+/* ===== §34 v2.2 点亮火种（一站一题，不卡进度） ===== */
+.spark { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line, rgba(31,26,23,.25)); }
+.spark-q { margin: 0 0 10px; font-family: var(--serif); font-weight: 700; font-size: 16px; line-height: 1.6; }
+.spark-dot { display: inline-block; width: 9px; height: 9px; margin-right: 8px; border-radius: 50%; border: 1.5px solid var(--red); vertical-align: 1px; transition: background .3s; }
+.step.is-sparked .spark-dot { background: var(--red); box-shadow: 0 0 0 4px rgba(201,63,28,.15); }
+.spark-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.spark-btn { flex: 1 1 110px; padding: 8px 12px; font: inherit; font-size: 15px; color: var(--ink); background: transparent; border: 1px solid rgba(31,26,23,.35); border-radius: 2px; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+.spark-btn:hover { border-color: var(--ink); }
+.spark-btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.spark-btn.is-right { background: var(--red); border-color: var(--red); color: var(--paper); }
+.spark-btn.is-wrong { border-color: var(--ink); background: rgba(31,26,23,.06); }
+.spark-result { margin: 8px 0 0; min-height: 1.6em; font-size: 14px; }
+.spark-result.is-right { color: var(--red-deep, #9E2B14); }
+.spark-result.is-wrong { color: var(--ink-soft); }
+.spark-count { position: absolute; left: 16px; bottom: 34px; margin: 0; padding: 4px 10px; font-size: 13px; color: var(--ink-soft); background: rgba(246,240,228,.9); border: 1px solid rgba(31,26,23,.15); display: flex; align-items: center; gap: 6px; z-index: 3; }
+.spark-count b { font-weight: 700; color: var(--ink); }
+.spark-count.is-lit b { color: var(--red); }
+.spark-dots { display: inline-flex; gap: 4px; }
+.spark-dots i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--red); transition: background .3s; }
+.spark-dots i.on { background: var(--red); }
+@media (prefers-reduced-motion: reduce) { .spark-dot, .spark-dots i { transition: none; } }

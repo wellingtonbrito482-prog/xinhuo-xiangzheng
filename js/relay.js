@@ -74,9 +74,11 @@ function fmtDate(iso) {
 const pad4 = (n) => String(n).padStart(4, '0');
 
 /** 海报底部时间线的站点（v1.1）：取地图上参与行军线的各站，短名=地图标签前两字，年份=date 里的“XXXX年” */
+import { getSparks } from './sparks.js';
+
 const TIMELINE = chapters
   .filter((ch) => ch.inRoute)
-  .map((ch) => ({ name: [...ch.mapLabel].slice(0, 2).join(''), year: (String(ch.date).match(/(\d{4})年/) || [, ''])[1] }));
+  .map((ch) => ({ id: ch.id, name: [...ch.mapLabel].slice(0, 2).join(''), year: (String(ch.date).match(/(\d{4})年/) || [, ''])[1] }));
 
 /**
  * 在 canvas 上画接力海报（1080 × 1440）
@@ -191,6 +193,7 @@ function drawPoster(canvas, e) {
   // 9) v1.1 时间线：按时间顺序从左到右 —— 汝城 1934 → 湘江 1934 → 通道 1934 → 桑植 1935 → 我 今天
   //    站名与年份从 nodes.js 读取（年份取 date 字段里的“XXXX年”），改配置即可同步。
   //    1934—1935 的路段用红色实线；从桑植到“我”跨越近一个世纪，用金色虚线表示“薪火相传”。
+  const lit = getSparks(); // v2.2：答题点亮的站画成实心火点
   const stops = [...TIMELINE, { name: '我', year: '今天', me: true }];
   const x0 = 170, x1 = W - 170, ty = 1212;
   const xs = stops.map((_, i) => x0 + ((x1 - x0) * i) / (stops.length - 1));
@@ -213,7 +216,7 @@ function drawPoster(canvas, e) {
     const px = xs[i];
     ctx.beginPath();
     ctx.arc(px, ty, st.me ? 16 : 11, 0, Math.PI * 2);
-    ctx.fillStyle = st.me ? C.red : C.paper;
+    ctx.fillStyle = st.me || lit.has(st.id) ? C.red : C.paper;
     ctx.fill();
     ctx.lineWidth = 5;
     ctx.strokeStyle = C.red;
@@ -235,6 +238,13 @@ function drawPoster(canvas, e) {
   ctx.fillText(fmtDate(e.time), 116, 1336);
   ctx.font = `400 26px ${SERIF}`;
   ctx.fillText('码承长征薪火，页绘青春征途', 116, 1368);
+  const litN = TIMELINE.filter((t) => lit.has(t.id)).length;
+  if (litN) {
+    ctx.textAlign = 'right';
+    ctx.fillStyle = C.red;
+    ctx.font = `700 28px ${SERIF}`;
+    ctx.fillText(`在湘征路上点亮了 ${litN} 处火种`, W - 230, 1352);
+  }
 
   // 印章“湘”：红底方块，略微旋转
   ctx.save();

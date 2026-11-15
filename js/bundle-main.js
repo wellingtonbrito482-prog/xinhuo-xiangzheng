@@ -249,6 +249,13 @@
         text: "\u4EC0\u4E48\u662F\u5171\u4EA7\u515A\uFF1F\u5171\u4EA7\u515A\u5C31\u662F\u81EA\u5DF1\u6709\u4E00\u6761\u88AB\u5B50\uFF0C\u4E5F\u8981\u526A\u4E0B\u534A\u6761\u7ED9\u8001\u767E\u59D3\u7684\u4EBA\u3002",
         source: "\u5F90\u89E3\u79C0\u8001\u4EBA\u8BED\uFF0C\u4E60\u8FD1\u5E73\u5728\u7EAA\u5FF5\u7EA2\u519B\u957F\u5F81\u80DC\u522980\u5468\u5E74\u5927\u4F1A\u4E0A\u7684\u8BB2\u8BDD\u5F15\u8FF0\uFF082016\u5E7410\u670821\u65E5\uFF09"
       },
+      // v2.2 点亮火种：题目与答案均取自本站已核实正文（S4、S5）
+      spark: {
+        q: "\u4E34\u8D70\u65F6\uFF0C\u4E09\u4F4D\u5973\u7EA2\u519B\u7ED9\u5F90\u89E3\u79C0\u7559\u4E0B\u4E86\u4EC0\u4E48\uFF1F",
+        options: ["\u4E00\u888B\u53E3\u7CAE", "\u534A\u6761\u884C\u519B\u88AB", "\u4E00\u4EF6\u68C9\u8863"],
+        answer: 1,
+        explain: "\u5979\u4EEC\u628A\u4EC5\u6709\u7684\u4E00\u6761\u884C\u519B\u88AB\u526A\u4E0B\u4E00\u534A\uFF0C\u7559\u7ED9\u4E86\u5F90\u89E3\u79C0\u3002"
+      },
       inRoute: true
     },
     {
@@ -267,6 +274,13 @@
       quote: {
         text: "\u4E09\u5E74\u4E0D\u996E\u6E58\u6C5F\u6C34\uFF0C\u5341\u5E74\u4E0D\u98DF\u6E58\u6C5F\u9C7C\u3002",
         source: "\u5E7F\u897F\u5174\u5B89\u3001\u754C\u9996\u4E00\u5E26\u6C11\u8C23"
+      },
+      // v2.2 点亮火种：取自本站正文（S11、S12）
+      spark: {
+        q: "\u6E58\u6C5F\u6218\u5F79\u540E\uFF0C\u4E2D\u592E\u7EA2\u519B\u7531\u51FA\u53D1\u65F6\u76848.6\u4E07\u4F59\u4EBA\u9510\u51CF\u81F3\u591A\u5C11\uFF1F",
+        options: ["6\u4E07\u4F59\u4EBA", "3\u4E07\u4F59\u4EBA", "1\u4E07\u4F59\u4EBA"],
+        answer: 1,
+        explain: "\u82E6\u6218\u4E94\u663C\u591C\u6E21\u8FC7\u6E58\u6C5F\uFF0C\u4E2D\u592E\u7EA2\u519B\u9510\u51CF\u81F33\u4E07\u4F59\u4EBA\u3002"
       },
       inRoute: true
     },
@@ -319,6 +333,13 @@
       quote: {
         text: "\u9A6C\u6851\u6811\u513F\u642D\u706F\u53F0\uFF0C\u5199\u5C01\u4E66\u4FE1\u4E0E\u59D0\u5E26\u3002",
         source: "\u6851\u690D\u6C11\u6B4C\u300A\u9A6C\u6851\u6811\u513F\u642D\u706F\u53F0\u300B\uFF081928\u5E74\u7EA2\u519B\u5E08\u957F\u8D3A\u9526\u658B\u6539\u8BCD\uFF09"
+      },
+      // v2.2 点亮火种：取自本站正文（S26）
+      spark: {
+        q: "1935\u5E7411\u670819\u65E5\uFF0C\u4ECE\u6851\u690D\u5218\u5BB6\u576A\u8A93\u5E08\u51FA\u53D1\u7684\u662F\u54EA\u652F\u961F\u4F0D\uFF1F",
+        options: ["\u7EA2\u4E00\u65B9\u9762\u519B", "\u7EA2\u56DB\u65B9\u9762\u519B", "\u7EA2\u4E8C\u3001\u516D\u519B\u56E2"],
+        answer: 2,
+        explain: "\u8D3A\u9F99\u3001\u4EFB\u5F3C\u65F6\u7B49\u7387\u7EA2\u4E8C\u3001\u516D\u519B\u56E21.7\u4E07\u4F59\u4EBA\u8A93\u5E08\u51FA\u53D1\u3002"
       },
       // 红二、六军团是另一路出发，行军线从这里单独起笔（不与通道相连）
       newBranch: true,
@@ -499,6 +520,31 @@
   }
   var detailOrder = chapters.filter((ch) => ch.detail);
 
+  // js/sparks.js
+  var KEY = "xinhuo-sparks-v1";
+  var listeners = /* @__PURE__ */ new Set();
+  function getSparks() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
+    } catch {
+      return /* @__PURE__ */ new Set();
+    }
+  }
+  function lightSpark(id) {
+    const s = getSparks();
+    if (s.has(id)) return s;
+    s.add(id);
+    try {
+      localStorage.setItem(KEY, JSON.stringify([...s]));
+    } catch {
+    }
+    listeners.forEach((fn) => fn(s));
+    return s;
+  }
+  function onSparks(fn) {
+    listeners.add(fn);
+  }
+
   // js/storymap.js
   var gsap2 = window.gsap;
   var echarts = window.echarts;
@@ -540,6 +586,13 @@
              </div>
              <p class="choice-result" aria-live="polite"></p>
            </div>` : "";
+      const spark = ch.spark ? `<div class="spark" role="group" aria-label="\u70B9\u4EAE\u706B\u79CD\u5C0F\u9898">
+             <p class="spark-q"><span class="spark-dot" aria-hidden="true"></span>\u70B9\u4EAE\u706B\u79CD \xB7 ${esc(ch.spark.q)}</p>
+             <div class="spark-options">
+               ${ch.spark.options.map((o, k) => `<button type="button" class="spark-btn" data-k="${k}">${esc(o)}</button>`).join("")}
+             </div>
+             <p class="spark-result" aria-live="polite"></p>
+           </div>` : "";
       const cta = ch.cta ? `<a class="cta" href="${esc(ch.cta.href)}">${esc(ch.cta.label)}</a>` : "";
       const more = ch.detail ? `<a class="step-more" href="pages/${esc(ch.detail.page)}">\u67E5\u770B\u8BE6\u60C5 <span aria-hidden="true">\u2192</span></a>` : "";
       return `<article class="step" id="step-${esc(ch.id)}" data-index="${i}" data-id="${esc(ch.id)}">
@@ -554,6 +607,7 @@
             <cite>\u2014\u2014 ${esc(ch.quote.source)}</cite>
           </blockquote>
           ${choice}
+          ${spark}
           ${more}
           ${cta}
         </article>`;
@@ -820,6 +874,40 @@
       });
       flyTo(target);
     }
+    const sparkIds = chapters.filter((ch) => ch.spark || ch.choice).map((ch) => ch.id);
+    const counter = document.getElementById("sparkCount");
+    const paintSparks = (set) => {
+      const n = sparkIds.filter((id) => set.has(id)).length;
+      if (counter) {
+        counter.querySelector("b").textContent = `${n}/${sparkIds.length}`;
+        counter.classList.toggle("is-lit", n > 0);
+        counter.querySelectorAll("i").forEach((dot, k) => dot.classList.toggle("on", set.has(sparkIds[k])));
+      }
+      stepsEl.querySelectorAll(".step").forEach((s) => s.classList.toggle("is-sparked", set.has(s.dataset.id)));
+    };
+    if (counter) counter.querySelector(".spark-dots").innerHTML = sparkIds.map(() => "<i></i>").join("");
+    paintSparks(getSparks());
+    onSparks(paintSparks);
+    chapters.filter((ch) => ch.spark).forEach((ch) => {
+      const box = stepsEl.querySelector(`[data-id="${ch.id}"] .spark`);
+      if (!box) return;
+      const res = box.querySelector(".spark-result");
+      box.querySelectorAll(".spark-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const ok = Number(btn.dataset.k) === ch.spark.answer;
+          box.querySelectorAll(".spark-btn").forEach((b) => b.classList.remove("is-right", "is-wrong"));
+          btn.classList.add(ok ? "is-right" : "is-wrong");
+          if (ok) {
+            res.textContent = `\u706B\u79CD\u5DF2\u70B9\u4EAE\u3002${ch.spark.explain}`;
+            res.className = "spark-result is-right";
+            lightSpark(ch.id);
+          } else {
+            res.textContent = "\u518D\u60F3\u60F3\uFF0C\u7B54\u6848\u5C31\u5728\u4E0A\u9762\u7684\u6545\u4E8B\u91CC\u3002";
+            res.className = "spark-result is-wrong";
+          }
+        });
+      });
+    });
     const tongdao = chapters.find((ch) => ch.choice);
     const choiceCard = tongdao && stepsEl.querySelector(`[data-id="${tongdao.id}"] .choice`);
     if (choiceCard) {
@@ -841,6 +929,7 @@
           btn.classList.add(cls);
           resultEl.className = `choice-result ${cls}`;
           resultEl.textContent = opt.result;
+          if (opt.correct) lightSpark(tongdao.id);
           const target = targets[opt.correct];
           const color = opt.correct ? C.ember : "#5E6878";
           chart.setOption({
@@ -1358,7 +1447,7 @@ ${material || "\uFF08\u65E0\uFF09"}` },
   }
 
   // js/relay-store.js
-  var KEY = "xhxz.relay.v1";
+  var KEY2 = "xhxz.relay.v1";
   var SEEDED_KEY = "xhxz.relay.seeded";
   var SAMPLES = [
     { name: "\u5C0F\u6E58", major: "\u8BA1\u7B97\u673A\u79D1\u5B66\u4E0E\u6280\u672F 2401", goal: "\u628A\u7F51\u9875\u5927\u8D5B\u4F5C\u54C1\u505A\u5230\u51B3\u8D5B\uFF0C\u7528\u4EE3\u7801\u8BB2\u597D\u5BB6\u4E61\u7684\u7EA2\u8272\u6545\u4E8B" },
@@ -1372,14 +1461,14 @@ ${material || "\uFF08\u65E0\uFF09"}` },
   ];
   function read() {
     try {
-      const arr = JSON.parse(localStorage.getItem(KEY) || "[]");
+      const arr = JSON.parse(localStorage.getItem(KEY2) || "[]");
       return Array.isArray(arr) ? arr : [];
     } catch {
       return [];
     }
   }
   function write(arr) {
-    localStorage.setItem(KEY, JSON.stringify(arr));
+    localStorage.setItem(KEY2, JSON.stringify(arr));
   }
   function createLocalStore() {
     if (!localStorage.getItem(SEEDED_KEY)) {
@@ -1454,7 +1543,7 @@ ${material || "\uFF08\u65E0\uFF09"}` },
     return `${d.getFullYear()}\u5E74${d.getMonth() + 1}\u6708${d.getDate()}\u65E5`;
   }
   var pad4 = (n) => String(n).padStart(4, "0");
-  var TIMELINE = chapters.filter((ch) => ch.inRoute).map((ch) => ({ name: [...ch.mapLabel].slice(0, 2).join(""), year: (String(ch.date).match(/(\d{4})年/) || [, ""])[1] }));
+  var TIMELINE = chapters.filter((ch) => ch.inRoute).map((ch) => ({ id: ch.id, name: [...ch.mapLabel].slice(0, 2).join(""), year: (String(ch.date).match(/(\d{4})年/) || [, ""])[1] }));
   function drawPoster(canvas, e) {
     const W = 1080, H = 1440;
     canvas.width = W;
@@ -1541,6 +1630,7 @@ ${material || "\uFF08\u65E0\uFF09"}` },
     const startY = 960 - (lines.length - 1) * lh / 2 + 18;
     ctx.fillStyle = C2.ink;
     lines.forEach((l, i) => ctx.fillText(l, W / 2, startY + i * lh));
+    const lit = getSparks();
     const stops = [...TIMELINE, { name: "\u6211", year: "\u4ECA\u5929", me: true }];
     const x0 = 170, x1 = W - 170, ty = 1212;
     const xs = stops.map((_, i) => x0 + (x1 - x0) * i / (stops.length - 1));
@@ -1563,7 +1653,7 @@ ${material || "\uFF08\u65E0\uFF09"}` },
       const px = xs[i];
       ctx.beginPath();
       ctx.arc(px, ty, st.me ? 16 : 11, 0, Math.PI * 2);
-      ctx.fillStyle = st.me ? C2.red : C2.paper;
+      ctx.fillStyle = st.me || lit.has(st.id) ? C2.red : C2.paper;
       ctx.fill();
       ctx.lineWidth = 5;
       ctx.strokeStyle = C2.red;
@@ -1583,6 +1673,13 @@ ${material || "\uFF08\u65E0\uFF09"}` },
     ctx.fillText(fmtDate(e.time), 116, 1336);
     ctx.font = `400 26px ${SERIF}`;
     ctx.fillText("\u7801\u627F\u957F\u5F81\u85AA\u706B\uFF0C\u9875\u7ED8\u9752\u6625\u5F81\u9014", 116, 1368);
+    const litN = TIMELINE.filter((t) => lit.has(t.id)).length;
+    if (litN) {
+      ctx.textAlign = "right";
+      ctx.fillStyle = C2.red;
+      ctx.font = `700 28px ${SERIF}`;
+      ctx.fillText(`\u5728\u6E58\u5F81\u8DEF\u4E0A\u70B9\u4EAE\u4E86 ${litN} \u5904\u706B\u79CD`, W - 230, 1352);
+    }
     ctx.save();
     ctx.translate(W - 170, 1338);
     ctx.rotate(-0.07);

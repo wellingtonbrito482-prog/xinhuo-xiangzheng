@@ -43,6 +43,8 @@ const C = {
   glow: '#E2572B',
 };
 
+import { getSparks, lightSpark, onSparks } from './sparks.js';
+
 const MAP_NAME = 'xiang'; // 注册到 ECharts 的底图名称
 
 /* =============================================================
@@ -72,6 +74,17 @@ function renderSteps(container) {
            </div>`
         : '';
 
+      // v2.2 点亮火种：一站一题（通道站用岔路口选择代替）
+      const spark = ch.spark
+        ? `<div class="spark" role="group" aria-label="点亮火种小题">
+             <p class="spark-q"><span class="spark-dot" aria-hidden="true"></span>点亮火种 · ${esc(ch.spark.q)}</p>
+             <div class="spark-options">
+               ${ch.spark.options.map((o, k) => `<button type="button" class="spark-btn" data-k="${k}">${esc(o)}</button>`).join('')}
+             </div>
+             <p class="spark-result" aria-live="polite"></p>
+           </div>`
+        : '';
+
       const cta = ch.cta ? `<a class="cta" href="${esc(ch.cta.href)}">${esc(ch.cta.label)}</a>` : '';
 
       // v1：有详情页的节点显示“查看详情 →”（相对路径，GitHub Pages 子路径下同样可用）
@@ -91,6 +104,7 @@ function renderSteps(container) {
             <cite>—— ${esc(ch.quote.source)}</cite>
           </blockquote>
           ${choice}
+          ${spark}
           ${more}
           ${cta}
         </article>`;
@@ -436,6 +450,42 @@ export function initStorymap({ hunanGeo, neighborsGeo, reducedMotion }) {
     flyTo(target);
   }
 
+  // ---- 1.5 v2.2 点亮火种：小题 + 地图角上的计数 ----
+  const sparkIds = chapters.filter((ch) => ch.spark || ch.choice).map((ch) => ch.id);
+  const counter = document.getElementById('sparkCount');
+  const paintSparks = (set) => {
+    const n = sparkIds.filter((id) => set.has(id)).length;
+    if (counter) {
+      counter.querySelector('b').textContent = `${n}/${sparkIds.length}`;
+      counter.classList.toggle('is-lit', n > 0);
+      counter.querySelectorAll('i').forEach((dot, k) => dot.classList.toggle('on', set.has(sparkIds[k])));
+    }
+    stepsEl.querySelectorAll('.step').forEach((s) => s.classList.toggle('is-sparked', set.has(s.dataset.id)));
+  };
+  if (counter) counter.querySelector('.spark-dots').innerHTML = sparkIds.map(() => '<i></i>').join('');
+  paintSparks(getSparks());
+  onSparks(paintSparks);
+  chapters.filter((ch) => ch.spark).forEach((ch) => {
+    const box = stepsEl.querySelector(`[data-id="${ch.id}"] .spark`);
+    if (!box) return;
+    const res = box.querySelector('.spark-result');
+    box.querySelectorAll('.spark-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const ok = Number(btn.dataset.k) === ch.spark.answer;
+        box.querySelectorAll('.spark-btn').forEach((b) => b.classList.remove('is-right', 'is-wrong'));
+        btn.classList.add(ok ? 'is-right' : 'is-wrong');
+        if (ok) {
+          res.textContent = `火种已点亮。${ch.spark.explain}`;
+          res.className = 'spark-result is-right';
+          lightSpark(ch.id);
+        } else {
+          res.textContent = '再想想，答案就在上面的故事里。';
+          res.className = 'spark-result is-wrong';
+        }
+      });
+    });
+  });
+
   // ---- 2. 岔路口互动（通道转兵） ----
   const tongdao = chapters.find((ch) => ch.choice);
   const choiceCard = tongdao && stepsEl.querySelector(`[data-id="${tongdao.id}"] .choice`);
@@ -459,6 +509,7 @@ export function initStorymap({ hunanGeo, neighborsGeo, reducedMotion }) {
         btn.classList.add(cls);
         resultEl.className = `choice-result ${cls}`;
         resultEl.textContent = opt.result;
+        if (opt.correct) lightSpark(tongdao.id);
 
         // 地图上画出所选方向
         const target = targets[opt.correct];
