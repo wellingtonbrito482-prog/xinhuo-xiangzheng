@@ -253,7 +253,10 @@ export async function initQA({ reducedMotion }) {
     await typewrite(p, text);
     if (meta) body.append(el('p', 'slip-meta', meta));
     if (suggestions.length) body.append(suggestionRow(suggestions));
-    body.append(el('p', 'slip-sign', '—— 薪火电报局 · 小红'));
+    // v2.2 打完盖一枚“已译”章（借鉴上观新闻《摩斯电码待破译》等电报类 H5）
+    const sign = el('p', 'slip-sign', '—— 薪火电报局 · 小红');
+    sign.prepend(el('span', 'slip-stamp', '已译'));
+    body.append(sign);
     scrollLog();
 
     busy = false;

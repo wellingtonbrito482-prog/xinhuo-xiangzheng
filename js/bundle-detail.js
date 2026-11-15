@@ -345,7 +345,7 @@
   var detailOrder = chapters.filter((ch) => ch.detail);
 
   // js/detail.js
-  var C = { red: "#B3261E", paper: "#F4EDE1", paperDark: "#E9DCC4", ink: "#1F1A17", inkSoft: "#5A4E45", gold: "#C9A45C" };
+  var C = { red: "#B3261E", paper: "#F6F1E7", paperDark: "#E9DCC4", ink: "#1F1A17", inkSoft: "#4F443C", gold: "#C9A45C" };
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function esc(str = "") {
     return String(str).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);

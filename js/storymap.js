@@ -25,7 +25,7 @@ const scrollama = window.scrollama;
 // ---- 颜色（与 css/style.css 的设计变量保持一致） ----
 const C = {
   red: '#B3261E',
-  paper: '#F4EDE1',
+  paper: '#F6F1E7',
   paperDark: '#E9DCC4',
   ink: '#1F1A17',
   inkSoft: '#5A4E45',
@@ -382,6 +382,19 @@ export function initStorymap({ hunanGeo, neighborsGeo, reducedMotion }) {
   const stepsEl = document.getElementById('steps');
   const mapEl = document.getElementById('map');
   const captionEl = document.getElementById('mapCaption');
+  // v2.2 章节进度条（借鉴 NYT《Snow Fall》章节跳转 / Mapbox 模板）：只列四站，点一下滚到该站
+  const railEl = document.getElementById('stationRail');
+  if (railEl) {
+    railEl.innerHTML = chapters
+      .map((ch, i) => (ch.mapLabel ? `<button type="button" data-i="${i}" aria-current="false"><i aria-hidden="true"></i>${esc([...ch.mapLabel].slice(0, 2).join(''))}</button>` : ''))
+      .join('');
+    railEl.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      const step = stepsEl.querySelectorAll('.step')[Number(b.dataset.i)];
+      step && step.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+    });
+  }
   renderSteps(stepsEl);
 
   // ---- 1. 地图初始化 ----
@@ -425,6 +438,7 @@ export function initStorymap({ hunanGeo, neighborsGeo, reducedMotion }) {
 
     // 卡片高亮
     stepsEl.querySelectorAll('.step').forEach((el, i) => el.classList.toggle('is-active', i === index));
+    railEl && railEl.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(Number(b.dataset.i) === index)));
 
     // 地图标题
     captionEl.textContent = chapter.coord ? chapter.mapLabel : chapter.kicker === '序章' ? '从瑞金到湖南' : '湖南 · 长征足迹';

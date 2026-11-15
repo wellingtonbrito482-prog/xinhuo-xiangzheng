@@ -9,10 +9,10 @@
 :root {
   --red: #B3261E;        /* 长征红 */
   --red-deep: #8E1D17;
-  --paper: #F4EDE1;      /* 米白纸 */
+  --paper: #F6F1E7;      /* 米白纸（v2.2 提亮一档，投影更干净） */
   --paper-dark: #E9DFCD; /* 稍深的纸色，用于卡片/分隔 */
   --ink: #1F1A17;        /* 墨黑 */
-  --ink-soft: #5A4E45;   /* 次要文字 */
+  --ink-soft: #4F443C;   /* 次要文字（v2.2 加深，小字在投影上也看得清） */
   --gold: #C9A45C;       /* 金 */
 
   /* 不依赖网络字体：优先使用系统已有的中文衬线/无衬线字体 */
@@ -33,7 +33,7 @@ body {
   line-height: 1.8;
   /* 纸色底 + 四角轻微“泛黄”的暗角 */
   background:
-    radial-gradient(ellipse at 50% 40%, rgba(244, 237, 225, 0) 55%, rgba(170, 140, 95, 0.16) 100%),
+    radial-gradient(ellipse at 50% 40%, rgba(246, 241, 231, 0) 55%, rgba(170, 140, 95, 0.16) 100%),
     var(--paper);
   background-attachment: fixed;
 }
@@ -62,7 +62,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(16px, 4vw, 48px);
-  background: rgba(244, 237, 225, 0.88);
+  background: rgba(246, 241, 231, 0.88);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-bottom: 1px solid transparent;
@@ -255,7 +255,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
 .map-note {
   position: absolute; right: 12px; bottom: 6px; margin: 0;
   font-size: 12px; color: var(--ink-soft);
-  padding: 0 6px; background: rgba(244, 237, 225, .9); /* v1.1：纸色底，不与地名叠字 */
+  padding: 0 6px; background: rgba(246, 241, 231, .9); /* v1.1：纸色底，不与地名叠字 */
 }
 
 .steps { padding: 20vh 0 30vh; }
@@ -282,8 +282,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
 .step h3 { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.3; margin: 2px 0 4px; }
 .step-place { margin: 0 0 14px; font-size: 13px; color: var(--ink-soft); }
 .step-place::before { content: "◉ "; color: var(--red); }
-.step-story { margin: 0; font-size: 16px; text-align: justify; }
-.step-note { margin: 10px 0 0; font-size: 13px; color: var(--ink-soft); }
+.step-story { margin: 0; font-size: 17px; line-height: 1.85; text-align: justify; } /* v2.2 投影：正文 17px */
+.step-note { margin: 10px 0 0; font-size: 14px; color: var(--ink-soft); }
 .step-quote {
   margin: 18px 0 0;
   padding: 12px 0 0 16px;
@@ -385,7 +385,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   .map-frame { outline-offset: 3px; }
   .steps { position: relative; z-index: 4; padding: 10vh 16px 20vh; }
   .step { margin-bottom: 45vh; padding: 20px 18px; }
-  .step-story { font-size: 15px; }
+  .step-story { font-size: 16px; }
 }
 @media (max-width: 420px) {
   .brand-text { display: none; } /* 极窄屏只留印章 */
@@ -461,7 +461,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
 .autoplay-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); }
 .autoplay-hint {
   font-size: 12px; color: var(--ink-soft);
-  background: rgba(244, 237, 225, .9); padding: 0 6px;
+  background: rgba(246, 241, 231, .9); padding: 0 6px;
 }
 
 /* ---------- 12. 薪火问答：电报单 ---------- */
@@ -811,7 +811,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   padding: 36px clamp(20px, 6vw, 72px);
   text-align: center;
   color: var(--paper); background: var(--red);
-  box-shadow: inset 0 0 0 6px var(--red), inset 0 0 0 7px rgba(244, 237, 225, .6);
+  box-shadow: inset 0 0 0 6px var(--red), inset 0 0 0 7px rgba(246, 241, 231, .6);
 }
 .golden blockquote { margin: 0; font-family: var(--serif); font-weight: 900; font-size: clamp(22px, 3vw, 34px); line-height: 1.6; }
 .golden figcaption { margin-top: 10px; font-size: 14px; opacity: .85; }
@@ -925,7 +925,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   padding: 2px 8px;
   font-size: 13px; line-height: 1.6;
   color: var(--ink);
-  background: rgba(244, 237, 225, .96);
+  background: rgba(246, 241, 231, .96);
   border: 1px solid var(--gold);
   white-space: nowrap;
 }
@@ -1342,7 +1342,7 @@ input, textarea { caret-color: var(--red); }
 /* 首页底部一层晨雾：山脊淡进纸色，暮色与白天之间没有硬边 */
 .v2 .hero.is-night::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 16vh; z-index: 2; pointer-events: none;
-  background: linear-gradient(rgba(244, 237, 225, 0), rgba(236, 214, 186, .75) 55%, var(--paper));
+  background: linear-gradient(rgba(246, 241, 231, 0), rgba(236, 214, 186, .75) 55%, var(--paper));
 }
 .v2 .storymap .map-frame {
   border: 1px solid rgba(31, 26, 23, .28);
@@ -1378,3 +1378,20 @@ input, textarea { caret-color: var(--red); }
 .spark-dots i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--red); transition: background .3s; }
 .spark-dots i.on { background: var(--red); }
 @media (prefers-reduced-motion: reduce) { .spark-dot, .spark-dots i { transition: none; } }
+
+/* ===== §35 v2.2 章节进度条（地图顶部居中，桌面显示） ===== */
+.station-rail { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 2px; z-index: 3;
+  padding: 3px 6px; background: rgba(246,241,231,.92); border: 1px solid rgba(31,26,23,.15); }
+.station-rail button { display: flex; align-items: center; gap: 5px; padding: 3px 8px; font: inherit; font-size: 13px; color: var(--ink-soft); background: none; border: 0; cursor: pointer; }
+.station-rail button i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--ink-soft); }
+.station-rail button:hover { color: var(--ink); }
+.station-rail button[aria-current="true"] { color: var(--red); font-weight: 700; }
+.station-rail button[aria-current="true"] i { background: var(--red); border-color: var(--red); }
+.station-rail button:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+@media (max-width: 900px) { .station-rail { display: none; } }
+
+/* ===== §36 v2.2 电报“已译”章 ===== */
+.slip-stamp { display: inline-block; margin-right: 12px; vertical-align: middle; padding: 1px 7px; font-family: var(--serif); font-weight: 900; font-size: 15px; letter-spacing: .2em;
+  color: var(--red); border: 2px solid var(--red); border-radius: 3px; transform: rotate(-8deg); opacity: .78; pointer-events: none; animation: stampIn .35s ease-out; }
+@keyframes stampIn { from { opacity: 0; transform: rotate(-8deg) scale(1.6); } to { opacity: .78; transform: rotate(-8deg) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .slip-stamp { animation: none; } }

@@ -29,7 +29,7 @@
 
 import { detailOrder, SOURCES } from './data/nodes.js';
 
-const C = { red: '#B3261E', paper: '#F4EDE1', paperDark: '#E9DCC4', ink: '#1F1A17', inkSoft: '#5A4E45', gold: '#C9A45C' };
+const C = { red: '#B3261E', paper: '#F6F1E7', paperDark: '#E9DCC4', ink: '#1F1A17', inkSoft: '#4F443C', gold: '#C9A45C' };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** HTML 转义：内容来自配置文件，也照样转义，养成习惯 */

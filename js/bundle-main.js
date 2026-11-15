@@ -551,7 +551,7 @@
   var scrollama = window.scrollama;
   var C = {
     red: "#B3261E",
-    paper: "#F4EDE1",
+    paper: "#F6F1E7",
     paperDark: "#E9DCC4",
     ink: "#1F1A17",
     inkSoft: "#5A4E45",
@@ -824,6 +824,16 @@
     const stepsEl = document.getElementById("steps");
     const mapEl = document.getElementById("map");
     const captionEl = document.getElementById("mapCaption");
+    const railEl = document.getElementById("stationRail");
+    if (railEl) {
+      railEl.innerHTML = chapters.map((ch, i) => ch.mapLabel ? `<button type="button" data-i="${i}" aria-current="false"><i aria-hidden="true"></i>${esc([...ch.mapLabel].slice(0, 2).join(""))}</button>` : "").join("");
+      railEl.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        const step = stepsEl.querySelectorAll(".step")[Number(b.dataset.i)];
+        step && step.scrollIntoView({ behavior: reducedMotion2 ? "auto" : "smooth", block: "center" });
+      });
+    }
     renderSteps(stepsEl);
     const neighborNames = registerBaseMap(hunanGeo, neighborsGeo);
     const chart = echarts.init(mapEl, null, { renderer: "canvas" });
@@ -856,6 +866,7 @@
       currentIndex = index;
       const chapter = chapters[index];
       stepsEl.querySelectorAll(".step").forEach((el3, i) => el3.classList.toggle("is-active", i === index));
+      railEl && railEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-current", String(Number(b.dataset.i) === index)));
       captionEl.textContent = chapter.coord ? chapter.mapLabel : chapter.kicker === "\u5E8F\u7AE0" ? "\u4ECE\u745E\u91D1\u5230\u6E56\u5357" : "\u6E56\u5357 \xB7 \u957F\u5F81\u8DB3\u8FF9";
       const state = routeStateAt(index);
       currentIdx = chapter.id === "prologue" ? 0 : chapter.coord ? routeNodes.indexOf(chapter) + 1 : -1;
@@ -1380,7 +1391,9 @@ ${material || "\uFF08\u65E0\uFF09"}` },
       await typewrite(p, text);
       if (meta) body.append(el("p", "slip-meta", meta));
       if (suggestions.length) body.append(suggestionRow(suggestions));
-      body.append(el("p", "slip-sign", "\u2014\u2014 \u85AA\u706B\u7535\u62A5\u5C40 \xB7 \u5C0F\u7EA2"));
+      const sign = el("p", "slip-sign", "\u2014\u2014 \u85AA\u706B\u7535\u62A5\u5C40 \xB7 \u5C0F\u7EA2");
+      sign.prepend(el("span", "slip-stamp", "\u5DF2\u8BD1"));
+      body.append(sign);
       scrollLog();
       busy = false;
       sendBtn.disabled = false;
@@ -1503,7 +1516,7 @@ ${material || "\uFF08\u65E0\uFF09"}` },
   // js/relay.js
   var store = createLocalStore();
   var LIMITS = { name: [1, 12], major: [1, 20], goal: [4, 40] };
-  var C2 = { red: "#B3261E", redDeep: "#8E1D17", paper: "#F4EDE1", paperDark: "#E9DFCD", ink: "#1F1A17", inkSoft: "#5A4E45", gold: "#C9A45C" };
+  var C2 = { red: "#B3261E", redDeep: "#8E1D17", paper: "#F6F1E7", paperDark: "#E9DFCD", ink: "#1F1A17", inkSoft: "#4F443C", gold: "#C9A45C" };
   var SERIF = '"Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif';
   var SANS = '"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif';
   function clean(str) {

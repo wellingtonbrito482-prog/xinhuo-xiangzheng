@@ -15,7 +15,7 @@ import { chapters } from './data/nodes.js';
 const store = createLocalStore();
 
 const LIMITS = { name: [1, 12], major: [1, 20], goal: [4, 40] };
-const C = { red: '#B3261E', redDeep: '#8E1D17', paper: '#F4EDE1', paperDark: '#E9DFCD', ink: '#1F1A17', inkSoft: '#5A4E45', gold: '#C9A45C' };
+const C = { red: '#B3261E', redDeep: '#8E1D17', paper: '#F6F1E7', paperDark: '#E9DFCD', ink: '#1F1A17', inkSoft: '#4F443C', gold: '#C9A45C' };
 const SERIF = '"Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif';
 const SANS = '"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif';
 
