@@ -1161,13 +1161,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   font-display: swap;
 }
 :root {
-  --night: #151A24;      /* 夜：带蓝的墨，不是纯黑 */
+  --night: #2A3450;      /* 暮色：v2.1 提亮一档（投影友好），不是纯黑 */
   --night-2: #1F2633;    /* 夜岭：地形填色 */
   --ridge: #3A4556;      /* 岭线：边界 */
   --ember: #E2572B;      /* 炬火：夜里的路线与光 */
   --ember-soft: #F08A4B;
   --moon: #ECE4D3;       /* 月白：夜里的文字 */
-  --moon-soft: #A9AFBB;  /* 夜里的次要文字（对 --night 对比度 ≥ 7:1） */
+  --moon-soft: #C9CDD6;  /* 暮色里的次要文字（对 --night 对比度 ≥ 7:1） */
   --display: "XinhuoSerif", var(--serif);
 }
 h1, h2, h3, .brand-text, .seal, .footer-title, .xiaohong-seal { font-family: var(--display); }
@@ -1180,15 +1180,15 @@ input, textarea { caret-color: var(--red); }
 /* ---------- 27. 夜行区块 ---------- */
 .v2 .is-night { background: var(--night); color: var(--moon); }
 .v2 .hero.is-night { background:
-  radial-gradient(120% 70% at 50% 108%, rgba(226, 87, 43, .22), transparent 60%),
-  linear-gradient(#0F131B, var(--night) 70%); }
+  radial-gradient(120% 60% at 50% 112%, rgba(255, 196, 140, .55), transparent 62%),
+  linear-gradient(#26304A 0%, #34405F 40%, #5A4F6E 70%, #A8705E 90%, #D9A27E 100%); }
 
 /* 纸张噪点在夜里改为“滤色”，否则会把夜色弄脏 */
 .v2 .paper-grain { opacity: .06; }
 
 /* 顶栏：夜里是半透明夜色，白天回到纸色（main.js 切换 .on-night） */
 .v2 .topbar { transition: background-color .4s, color .4s, border-color .3s, box-shadow .3s; }
-.v2 .topbar.on-night { background: rgba(21, 26, 36, .82); color: var(--moon); }
+.v2 .topbar.on-night { background: rgba(38, 48, 74, .86); color: var(--moon); }
 .v2 .topbar.on-night.is-scrolled { border-bottom-color: rgba(236, 228, 211, .25); box-shadow: none; }
 .v2 .topbar.on-night .seal { color: var(--moon); }
 
@@ -1203,9 +1203,9 @@ input, textarea { caret-color: var(--red); }
 /* ---------- 28. 首页「夜行」 ---------- */
 .v2 .hero-stage { color: var(--moon); }
 .ridges { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 46vh; pointer-events: none; }
-.ridge.r3 { fill: #1B2230; }
-.ridge.r2 { fill: #181E2A; }
-.ridge.r1 { fill: #12161F; }
+.ridge.r3 { fill: #5C5675; }
+.ridge.r2 { fill: #464766; }
+.ridge.r1 { fill: #353A57; }
 .embers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
 .v2 .march { z-index: 2; }
@@ -1290,11 +1290,13 @@ input, textarea { caret-color: var(--red); }
 /* ---------- 30. 破晓：夜色 → 纸色 ---------- */
 .dawn {
   position: relative;
-  min-height: 95vh;
-  display: grid; place-items: end center;
-  padding: 18vh 24px 12vh;
-  background: linear-gradient(180deg,
-    var(--night) 0%, #262433 16%, #5E4244 32%, #B97752 46%, #E7BF93 60%, #F1E2CB 74%, var(--paper) 88%);
+  min-height: 62vh;
+  display: grid; place-items: center;
+  padding: 12vh 24px;
+  /* v2.1：破晓改在亮底上——纸色中升起一轮暖光，投影仪上也清楚 */
+  background:
+    radial-gradient(60% 70% at 50% 108%, rgba(226, 87, 43, .30), rgba(240, 160, 90, .16) 45%, transparent 72%),
+    linear-gradient(180deg, var(--paper), #F5E2C6 70%, #F2D7B3);
   text-align: center;
 }
 .dawn-line {
@@ -1334,3 +1336,20 @@ input, textarea { caret-color: var(--red); }
   .embers { display: none; }
   .hero-code code.is-typing::after { animation: none; }
 }
+
+/* ---------- 33. v2.1 投影友好：日出接缝与亮底地图 ---------- */
+.v2 .storymap { background: var(--paper); }
+/* 首页底部一层晨雾：山脊淡进纸色，暮色与白天之间没有硬边 */
+.v2 .hero.is-night::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 16vh; z-index: 2; pointer-events: none;
+  background: linear-gradient(rgba(244, 237, 225, 0), rgba(236, 214, 186, .75) 55%, var(--paper));
+}
+.v2 .storymap .map-frame {
+  border: 1px solid rgba(31, 26, 23, .28);
+  outline: 0;
+  border-radius: 4px;
+  background: radial-gradient(90% 80% at 55% 45%, #FBF6EC, #F1E8D8);
+  box-shadow: 0 24px 50px -30px rgba(60, 40, 20, .45);
+}
+.v2 .storymap .map-caption { background: var(--red); color: #fff; border-radius: 2px; top: 14px; left: 16px; }
+.v2 .storymap .step { border-radius: 3px; }

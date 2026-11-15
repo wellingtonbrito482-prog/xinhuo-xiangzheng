@@ -31,16 +31,16 @@ const C = {
   inkSoft: '#5A4E45',
   gold: '#C9A45C',
   neighborLine: '#BDB09C',
-  // v2「夜行」：地图在夜色里
-  night: '#151A24',
-  land: '#26303F',      // 湖南各市州
-  landEdge: '#4A566A',
-  outer: '#1A202B',     // 周边省份
-  outerEdge: '#2E3747',
-  moon: '#ECE4D3',
-  moonSoft: '#A9AFBB',
-  ember: '#E2572B',
-  glow: '#FFD08A',
+  // v2.1「投影友好」：地图回到亮纸底，路线用炬火红（投影仪上暗底会发灰，亮底更稳）
+  night: '#F7F1E6',     // 未到达站点的填色（纸白）
+  land: '#E8DCC5',      // 湖南各市州
+  landEdge: '#B8A68A',
+  outer: '#F1EADD',     // 周边省份
+  outerEdge: '#D9CDB8',
+  moon: '#1F1A17',
+  moonSoft: '#8A7C6E',
+  ember: '#C93F1C',     // 路线：比 v2 深一档，纸底上对比度足够
+  glow: '#E2572B',
 };
 
 const MAP_NAME = 'xiang'; // 注册到 ECharts 的底图名称
@@ -248,7 +248,7 @@ function baseOption(neighborNames, reducedMotion) {
         type: 'lines',
         coordinateSystem: 'geo',
         zlevel: 1,
-        lineStyle: { color: C.ember, width: 2.5, opacity: 0.8, curveness: 0.18, shadowColor: 'rgba(226,87,43,0.8)', shadowBlur: 8 },
+        lineStyle: { color: C.ember, width: 2.5, opacity: 0.8, curveness: 0.18, shadowColor: 'rgba(201,63,28,0.35)', shadowBlur: 6 },
         data: [],
       },
       {
@@ -266,7 +266,7 @@ function baseOption(neighborNames, reducedMotion) {
           symbolSize: 9,
           color: C.glow,
         },
-        lineStyle: { color: C.ember, width: 3.2, opacity: 1, curveness: 0.18, shadowColor: 'rgba(255,170,90,0.9)', shadowBlur: 12 },
+        lineStyle: { color: C.ember, width: 3.2, opacity: 1, curveness: 0.18, shadowColor: 'rgba(201,63,28,0.45)', shadowBlur: 8 },
         data: [],
       },
       {
@@ -313,7 +313,7 @@ function baseOption(neighborNames, reducedMotion) {
         zlevel: 4,
         symbolSize: 16,
         rippleEffect: { brushType: 'stroke', scale: 4, period: 3 },
-        itemStyle: { color: C.ember, shadowBlur: 16, shadowColor: 'rgba(255,170,90,.9)' },
+        itemStyle: { color: C.ember, shadowBlur: 10, shadowColor: 'rgba(201,63,28,.5)' },
         data: [],
       },
       {

@@ -293,11 +293,10 @@ export const details = {
     },
     photo: {
       src: 'photos/rucheng.jpg',
-      caption: '汝城县城远眺（摄于汝城县烈士陵园，2024年2月）。此图不是沙洲村：沙洲村距汝城县城约37千米，目前未找到可开放使用的沙洲村照片，暂以汝城风貌示意。',
-      credit: 'Uuongkinghe，经 Wikimedia Commons（本站已缩小尺寸并调色）',
-      license: 'CC BY-SA 4.0',
-      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:%E6%B1%9D%E5%9F%8E%E5%8E%BF_20240219.jpg',
+      caption: '汝城县文明瑶族乡沙洲瑶族村新貌——“半条被子”故事发生地（2026年10月）。',
+      credit: '郴州日报全媒体记者 陈红军 李成义 邓智华，郴州新闻网（本站裁去水印并缩小尺寸）',
+      license: '转载自新闻报道，仅用于校内比赛非商业展示，版权归原作者',
+      sourceUrl: 'https://www.czxww.cn/content/2026-10/30/content_1410614.html',
     },
   },
 
@@ -386,11 +385,10 @@ export const details = {
     },
     photo: {
       src: 'photos/tongdao.jpg',
-      caption: '渠水流经通道县县溪镇（2022年12月，据照片定位）。通道转兵纪念馆和恭城书院都在县溪镇，但图中没有拍到书院本身。',
-      credit: 'Sufangxi，经 Wikimedia Commons（本站已缩小尺寸并调色）',
-      license: 'CC0 1.0（公有领域贡献）',
-      licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Qu_River_(Yuan_River_tributary)_%EF%BC%8CTongdao%EF%BC%8CHunan_province.jpg',
+      caption: '红军长征通道转兵会议旧址——县溪镇恭城书院（全国重点文物保护单位）。',
+      credit: '检察日报全媒体记者 朱书慧 张吟丰，经搜狐转载（本站缩小尺寸）',
+      license: '转载自新闻报道，仅用于校内比赛非商业展示，版权归原作者',
+      sourceUrl: 'https://www.sohu.com/a/1090194571_121106908',
     },
   },
 
@@ -433,11 +431,10 @@ export const details = {
     },
     photo: {
       src: 'photos/sangzhi.jpg',
-      caption: '一只怀表。Wikimedia Commons 原图说明称它是桑植起义领导人贺龙用过的怀表（国家一级文物）。这是桑植起义的相关文物，不是刘家坪长征出发地的实景。',
-      credit: 'Antolavoasio，经 Wikimedia Commons（本站已缩小尺寸并调色）',
-      license: 'CC BY-SA 4.0',
-      licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Pocket_watch_used_by_Sangzhi_Uprising_leader_He_Long.jpg',
+      caption: '中国工农红军第二方面军长征出发地纪念馆（张家界市桑植县刘家坪白族乡）。',
+      credit: '湖南红网“湖南红色记忆”系列报道（本站缩小尺寸）',
+      license: '转载自新闻报道，仅用于校内比赛非商业展示，版权归原作者',
+      sourceUrl: 'https://hn.rednet.cn/content/646941/50/15129857.html',
     },
   },
 };
