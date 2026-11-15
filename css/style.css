@@ -696,8 +696,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   position: absolute; right: 12px; bottom: 9px;
   padding: 0 6px;
   font-family: var(--serif); font-weight: 900; font-size: 13px; letter-spacing: .2em;
-  color: rgba(179, 38, 30, .6);
-  border: 2px solid rgba(179, 38, 30, .5);
+  color: #A3231C;
+  border: 2px solid rgba(179, 38, 30, .7);
   transform: rotate(-12deg);
 }
 
@@ -802,7 +802,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
   color: var(--paper); background: var(--red);
   transform: rotate(-4deg);
 }
-.person h4 { margin: 0; font-family: var(--serif); font-size: 18px; }
+.person .person-name { margin: 0; font-family: var(--display); font-size: 18px; line-height: 1.4; }
 .person-role { margin: 0 0 4px; font-size: 12px; color: var(--red); }
 .person p:last-child { margin: 0; font-size: 14px; }
 
@@ -987,7 +987,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
 .qa-desc { margin-bottom: 14px; }
 .qa-scope {
   margin: 0 0 16px; padding: 12px 14px;
-  background: #FBF6EA; border: 1px solid #CDBB98; border-left: 3px solid var(--gold);
+  background: #FBF6EA; border: 1px solid #CDBB98; border-top: 2px solid var(--gold);
 }
 .qa-topics { list-style: none; margin: 0; padding: 0; font-size: 14px; color: var(--ink-soft); }
 .qa-topics li { display: flex; gap: 10px; padding: 3px 0; border-bottom: 1px dashed #CDBB98; }
@@ -1143,3 +1143,194 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 900; margin: 0; }
 .src-all { margin: 4px 0 10px; font-size: 14px; }
 .src-all summary { cursor: pointer; color: var(--red); }
 .src-all .src-notes { font-size: 13px; max-height: 320px; overflow: auto; padding-right: 6px; }
+
+/* =============================================================
+   v2「夜行 · 破晓」视觉改版（2026-11-15）
+   概念：页面滚动 = 时间流动。
+     1934—1935 的“夜行军”（首页 + 湘征地图）在夜色里，薪火是唯一的光；
+     过一道“破晓”渐变，进入 2026 的白天（问答、接力、关于）——纸面档案与今天的我们。
+   一处大胆：首页夜色中随滚动燃起的火线与火星；其余保持克制。
+   ============================================================= */
+
+/* ---------- 26. 自托管标题字体（思源宋体 Heavy 子集，SIL OFL 1.1，离线可用） ---------- */
+@font-face {
+  font-family: "XinhuoSerif";
+  src: url("../assets/fonts/xinhuo-serif-black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --night: #151A24;      /* 夜：带蓝的墨，不是纯黑 */
+  --night-2: #1F2633;    /* 夜岭：地形填色 */
+  --ridge: #3A4556;      /* 岭线：边界 */
+  --ember: #E2572B;      /* 炬火：夜里的路线与光 */
+  --ember-soft: #F08A4B;
+  --moon: #ECE4D3;       /* 月白：夜里的文字 */
+  --moon-soft: #A9AFBB;  /* 夜里的次要文字（对 --night 对比度 ≥ 7:1） */
+  --display: "XinhuoSerif", var(--serif);
+}
+h1, h2, h3, .brand-text, .seal, .footer-title, .xiaohong-seal { font-family: var(--display); }
+
+/* 浏览器自带表面也跟着配色（选中文字、滚动条、光标） */
+::selection { background: var(--red); color: var(--paper); }
+html { scrollbar-color: var(--red) var(--paper-dark); }
+input, textarea { caret-color: var(--red); }
+
+/* ---------- 27. 夜行区块 ---------- */
+.v2 .is-night { background: var(--night); color: var(--moon); }
+.v2 .hero.is-night { background:
+  radial-gradient(120% 70% at 50% 108%, rgba(226, 87, 43, .22), transparent 60%),
+  linear-gradient(#0F131B, var(--night) 70%); }
+
+/* 纸张噪点在夜里改为“滤色”，否则会把夜色弄脏 */
+.v2 .paper-grain { opacity: .06; }
+
+/* 顶栏：夜里是半透明夜色，白天回到纸色（main.js 切换 .on-night） */
+.v2 .topbar { transition: background-color .4s, color .4s, border-color .3s, box-shadow .3s; }
+.v2 .topbar.on-night { background: rgba(21, 26, 36, .82); color: var(--moon); }
+.v2 .topbar.on-night.is-scrolled { border-bottom-color: rgba(236, 228, 211, .25); box-shadow: none; }
+.v2 .topbar.on-night .seal { color: var(--moon); }
+
+/* 引信进度条：整页阅读进度，火头带一点亮光 */
+.fuse { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; pointer-events: none; }
+.fuse i {
+  display: block; height: 100%; width: 100%;
+  transform-origin: left center; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--red), var(--ember) 92%, #FFD08A);
+}
+
+/* ---------- 28. 首页「夜行」 ---------- */
+.v2 .hero-stage { color: var(--moon); }
+.ridges { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 46vh; pointer-events: none; }
+.ridge.r3 { fill: #1B2230; }
+.ridge.r2 { fill: #181E2A; }
+.ridge.r1 { fill: #12161F; }
+.embers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+.v2 .march { z-index: 2; }
+.v2 .march-ghost { stroke: var(--moon); stroke-opacity: .22; }
+.v2 .march-line { stroke: var(--ember); filter: drop-shadow(0 0 6px rgba(226, 87, 43, .65)); }
+.v2 .march-head { fill: #FFD08A; filter: drop-shadow(0 0 10px rgba(255, 170, 90, .95)); }
+.v2 .march-label { fill: var(--moon); font-family: var(--display); }
+.v2 .march-label-dot { fill: var(--night); stroke: var(--ember); }
+
+.v2 .hero-copy { z-index: 3; margin-top: -14vh; }
+.v2 .hero-title {
+  color: var(--moon);
+  letter-spacing: .02em;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, .55);
+}
+.v2 .hero-title .bracket { color: var(--ember); }
+.v2 .hero-title .mid-dot { color: var(--gold); }
+.v2 .hero-sub { color: var(--moon); text-shadow: none; letter-spacing: .32em; }
+.hero-date {
+  margin: 14px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(13px, 1.1vw, 15px);
+  letter-spacing: .18em;
+  color: var(--moon-soft);
+}
+.hero-date span + span { margin-left: 1.2em; }
+.hero-code {
+  display: inline-flex; align-items: center; gap: .5em;
+  margin: 26px 0 0;
+  padding: 7px 14px;
+  border: 1px solid rgba(236, 228, 211, .18);
+  border-radius: 6px;
+  background: rgba(15, 19, 27, .55);
+  font-family: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+  font-size: clamp(14px, 1.3vw, 17px);
+  color: var(--moon);
+}
+.hero-code .prompt { color: var(--ember-soft); }
+.hero-code code { font-family: inherit; white-space: pre; }
+.hero-code code.is-typing::after {
+  content: ""; display: inline-block; width: .55em; height: 1.1em; margin-left: 2px;
+  vertical-align: -0.18em; background: var(--ember-soft);
+  animation: caret 1s steps(1) infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+.v2 .scroll-hint { color: var(--moon-soft); z-index: 3; }
+.v2 .scroll-hint i { background: linear-gradient(var(--ember), transparent); }
+
+/* ---------- 29. 湘征地图：夜色地图 + 纸面档案卡片（“借着火光读档案”） ---------- */
+.v2 .storymap { padding-top: 96px; }
+.v2 .section-head { border-top: 0; padding-top: 0; }
+.v2 .is-night .section-head::before, .v2 .is-night .section-head::after { display: none; }
+.v2 .is-night .section-head h2 { color: var(--moon); }
+.v2 .is-night .section-lead { color: var(--moon-soft); }
+.v2 .is-night .map-frame {
+  border: 1px solid rgba(236, 228, 211, .22);
+  outline: 0;
+  border-radius: 4px;
+  background: radial-gradient(90% 80% at 55% 45%, #1C2330, #12161F);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8);
+}
+.v2 .is-night .map-caption { background: var(--red); color: #fff; border-radius: 2px; top: 14px; left: 16px; }
+.v2 .is-night .map-note { background: transparent; color: var(--moon-soft); }
+.v2 .is-night .step {
+  background: var(--paper);
+  color: var(--ink);
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .75);
+  opacity: .86;
+}
+.v2 .is-night .step.is-active {
+  opacity: 1;
+  box-shadow: 0 0 0 1px rgba(226, 87, 43, .8), 0 26px 50px -22px rgba(0, 0, 0, .9);
+}
+/* 引文：去掉粗侧边条，改为一枚引号标记 */
+.v2 .step-quote { border-left: 0; padding: 14px 0 0 0; position: relative; }
+.v2 .step-quote::before {
+  content: ""; display: block; width: 28px; height: 2px; margin-bottom: 12px; background: var(--red);
+}
+
+/* ---------- 30. 破晓：夜色 → 纸色 ---------- */
+.dawn {
+  position: relative;
+  min-height: 95vh;
+  display: grid; place-items: end center;
+  padding: 18vh 24px 12vh;
+  background: linear-gradient(180deg,
+    var(--night) 0%, #262433 16%, #5E4244 32%, #B97752 46%, #E7BF93 60%, #F1E2CB 74%, var(--paper) 88%);
+  text-align: center;
+}
+.dawn-line {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 3.6vw, 48px);
+  line-height: 1.6;
+  letter-spacing: .08em;
+  color: var(--ink);
+}
+.dawn-line::after {
+  content: ""; display: block; width: 72px; height: 2px; margin: 26px auto 0;
+  background: var(--red);
+}
+
+/* ---------- 31. 白天区块的细节修正 ---------- */
+.v2 .qa-topics li { border-bottom-color: rgba(31, 26, 23, .14); }
+.v2 .section-head h2 { letter-spacing: .04em; }
+
+/* ---------- 32. v2 手机端 ---------- */
+@media (max-width: 860px) {
+  .v2 .is-night .map-sticky { background: var(--night); box-shadow: 0 10px 18px -10px rgba(0, 0, 0, .9); }
+  .v2 .is-night .step { opacity: 1; }
+}
+@media (max-width: 760px) {
+  .ridges { height: 38vh; }
+  .v2 .hero-copy { margin-top: -10vh; }
+  .hero-date { letter-spacing: .1em; padding: 0 12px; }
+  .hero-date span { display: block; }
+  .hero-date span + span { margin: 4px 0 0; }
+  .hero-code { font-size: 13px; }
+  .dawn { min-height: 56vh; }
+}
+
+/* ---------- 33. 减少动态效果 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .embers { display: none; }
+  .hero-code code.is-typing::after { animation: none; }
+}

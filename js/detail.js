@@ -75,7 +75,7 @@ function render(node, idx) {
     .map(
       (p) => `<article class="person">
         <div class="person-seal" aria-hidden="true">${esc([...p.name][0])}</div>
-        <div><h4>${esc(p.name)}</h4><p class="person-role">${esc(p.role)}</p><p>${esc(p.text)}</p></div>
+        <div><h3 class="person-name">${esc(p.name)}</h3><p class="person-role">${esc(p.role)}</p><p>${esc(p.text)}</p></div>
       </article>`
     )
     .join('');

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>薪火·湘征 —— 长征湖南段交互数字展</title>
   <meta name="description" content="码承长征薪火，页绘青春征途。纪念中国工农红军长征胜利90周年，长征湖南段交互数字展：滚动地图走过汝城、湘江、通道、桑植，问AI讲解员小红，写下你的青春接力。" />
-  <meta name="theme-color" content="#F4EDE1" />
+  <meta name="theme-color" content="#151A24" />
   <!-- v1.1：分享卡片（Open Graph）。og:image 必须是完整网址，指向 GitHub Pages 上的 assets/og.png（1200×630） -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="薪火·湘征" />
@@ -20,9 +20,10 @@
   <meta name="twitter:card" content="summary_large_image" />
   <!-- 内联 SVG 图标（红色印章“湘”），无需额外文件，也避免 favicon 404 -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23B3261E'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23F4EDE1' font-family='serif' font-weight='bold'%3E%E6%B9%98%3C/text%3E%3C/svg%3E" />
+  <link rel="preload" href="assets/fonts/xinhuo-serif-black.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body class="v2">
   <!-- 纸张噪点纹理：一层固定在视口上的半透明噪点（见 css/style.css 的 .paper-grain） -->
   <div class="paper-grain" aria-hidden="true"></div>
 
@@ -38,24 +39,25 @@
       <a href="#relay">青春接力</a>
       <a href="#about">关于我们</a>
     </nav>
+    <!-- v2：引信进度条——整页滚动进度，像一根正在燃烧的引信 -->
+    <div class="fuse" aria-hidden="true"><i id="fuseBar"></i></div>
   </header>
 
   <main>
     <!-- ===================== 1. 首页 Hero「启程」 ===================== -->
     <!-- hero 比一屏更高，内部 .hero-stage 吸顶；滚动这段距离时红色行军线逐渐画出 -->
-    <section class="hero" id="hero" aria-labelledby="hero-title">
+    <section class="hero is-night" id="hero" aria-labelledby="hero-title">
       <div class="hero-stage">
         <!-- ▼ v1.1 主视觉插槽：把图片放进 assets/（如 assets/hero.jpg），再把文件路径填进下面的 data-src；
              留空则不显示（不发任何请求，也就不会有 404）。图片会被处理成淡淡的旧报纸色调，压在标题后面。 -->
         <div class="hero-visual" id="heroVisual" data-src="" aria-hidden="true"></div>
-        <!-- 报纸刊头信息条 -->
-        <div class="masthead-line">
-          <span>一九三四 — 二〇二六</span>
-          <span class="dot" aria-hidden="true">◆</span>
-          <span>长征湖南段 · 交互数字展</span>
-          <span class="dot" aria-hidden="true">◆</span>
-          <span>湖南工学院 · 衡阳</span>
-        </div>
+        <!-- v2「夜行」：三层山脊剪影（纯几何 SVG）+ 火星粒子画布（js/hero.js） -->
+        <svg class="ridges" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
+          <path class="ridge r3" d="M0,210 L90,170 L170,196 L260,128 L350,176 L430,140 L520,186 L610,112 L700,168 L800,132 L890,180 L980,120 L1070,164 L1160,126 L1250,172 L1350,138 L1440,170 L1440,400 L0,400 Z"/>
+          <path class="ridge r2" d="M0,262 L110,214 L200,246 L300,196 L380,236 L470,204 L560,250 L650,190 L760,240 L850,206 L950,252 L1040,200 L1150,244 L1240,212 L1340,250 L1440,220 L1440,400 L0,400 Z"/>
+          <path class="ridge r1" d="M0,320 L130,282 L240,312 L350,270 L470,316 L580,286 L700,322 L820,280 L930,318 L1050,288 L1170,326 L1290,290 L1440,316 L1440,400 L0,400 Z"/>
+        </svg>
+        <canvas class="embers" id="embers" aria-hidden="true"></canvas>
 
         <!-- 行军线：标题下方一条自东（右）向西（左）蜿蜒的红线，随滚动“走”出来 -->
         <svg class="march" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -72,24 +74,25 @@
         </svg>
 
         <div class="hero-copy">
-          <p class="hero-kicker">纪念中国工农红军长征胜利90周年</p>
           <h1 class="hero-title" id="hero-title">
             <span class="bracket" aria-hidden="true">《</span>薪火<span class="mid-dot">·</span>湘征<span class="bracket" aria-hidden="true">》</span>
           </h1>
           <p class="hero-sub">码承长征薪火，页绘青春征途</p>
+          <p class="hero-date"><span>纪念中国工农红军长征胜利九十周年</span><span>一九三六—二〇二六</span></p>
+          <!-- v2：一行真代码（JS 允许中文标识符），由 hero.js 逐字打出——“码承长征薪火”的字面意思 -->
+          <p class="hero-code" aria-label="代码：青春.接过(薪火)"><span class="prompt" aria-hidden="true">&gt;</span> <code id="heroCode" aria-hidden="true">青春.接过(薪火);</code></p>
         </div>
 
         <a class="scroll-hint" href="#storymap" aria-label="向下滚动，进入湘征地图">
-          <span>向下滚动 · 启程</span>
+          <span>向下滚动，启程</span>
           <i aria-hidden="true"></i>
         </a>
       </div>
     </section>
 
     <!-- ===================== 2. 湘征地图（滚动叙事） ===================== -->
-    <section class="storymap" id="storymap" aria-labelledby="storymap-title">
+    <section class="storymap is-night" id="storymap" aria-labelledby="storymap-title">
       <header class="section-head">
-        <p class="section-no">第一版 · 湘征地图</p>
         <h2 id="storymap-title">一条路，走过三湘</h2>
         <p class="section-lead">向下滚动，跟随红军的足迹，走过长征在湖南的关键节点。</p>
       </header>
@@ -114,10 +117,14 @@
       </div>
     </section>
 
+    <!-- ===================== v2 破晓：从“夜行”过渡到“今天”（纯 CSS 渐变 + 一句话） ===================== -->
+    <div class="dawn" aria-hidden="false">
+      <p class="dawn-line">天亮了。<br />九十年后，薪火传到了我们手里。</p>
+    </div>
+
     <!-- ===================== 3. 薪火问答：AI 讲解员「小红」（js/qa.js） ===================== -->
     <section class="qa" id="qa" aria-labelledby="qa-title">
       <header class="section-head">
-        <p class="section-no">第二版 · 薪火问答</p>
         <h2 id="qa-title">给小红发一封电报</h2>
         <p class="section-lead">关于长征湖南段的任何问题，都可以“发报”问AI讲解员小红。</p>
       </header>
@@ -186,7 +193,6 @@
     <!-- ===================== 4. 青春接力（js/relay.js + js/relay-store.js） ===================== -->
     <section class="relay" id="relay" aria-labelledby="relay-title">
       <header class="section-head">
-        <p class="section-no">第三版 · 青春接力</p>
         <h2 id="relay-title">接过薪火，写下你的新长征</h2>
         <p class="section-lead">每一代人都有自己的长征路。留下你的目标，生成一张属于你的接力海报。</p>
       </header>
@@ -241,7 +247,6 @@
     <!-- ===================== 5. 关于我们 ===================== -->
     <section class="about" id="about" aria-labelledby="about-title">
       <header class="section-head">
-        <p class="section-no">第四版 · 关于我们</p>
         <h2 id="about-title">关于《薪火·湘征》</h2>
       </header>
 

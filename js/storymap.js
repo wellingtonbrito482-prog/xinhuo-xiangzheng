@@ -31,6 +31,16 @@ const C = {
   inkSoft: '#5A4E45',
   gold: '#C9A45C',
   neighborLine: '#BDB09C',
+  // v2「夜行」：地图在夜色里
+  night: '#151A24',
+  land: '#26303F',      // 湖南各市州
+  landEdge: '#4A566A',
+  outer: '#1A202B',     // 周边省份
+  outerEdge: '#2E3747',
+  moon: '#ECE4D3',
+  moonSoft: '#A9AFBB',
+  ember: '#E2572B',
+  glow: '#FFD08A',
 };
 
 const MAP_NAME = 'xiang'; // 注册到 ECharts 的底图名称
@@ -162,8 +172,8 @@ function registerBaseMap(hunanGeo, neighborsGeo) {
 function neighborRegions(names, showName) {
   return names.map((name) => ({
     name,
-    itemStyle: { areaColor: 'rgba(244,237,225,0.6)', borderColor: C.neighborLine, borderWidth: 0.8 },
-    label: { show: showName, color: 'rgba(90,78,69,0.45)', fontSize: 11, fontFamily: 'serif', fontWeight: 'normal' },
+    itemStyle: { areaColor: C.outer, borderColor: C.outerEdge, borderWidth: 0.8 },
+    label: { show: showName, color: 'rgba(169,175,187,0.55)', fontSize: 11, fontFamily: 'serif', fontWeight: 'normal' },
   }));
 }
 
@@ -222,11 +232,13 @@ function baseOption(neighborNames, reducedMotion) {
       zoom: chapters[0].view.zoom,
       aspectScale: 0.85,      // 纬度修正，让湖南的形状更接近真实比例
       itemStyle: {
-        areaColor: C.paperDark,
-        borderColor: C.ink,
-        borderWidth: 0.6,
+        areaColor: C.land,
+        borderColor: C.landEdge,
+        borderWidth: 0.7,
+        shadowColor: 'rgba(0,0,0,0.5)',
+        shadowBlur: 12,
       },
-      label: { show: true, color: C.inkSoft, fontSize: 11 },
+      label: { show: true, color: 'rgba(169,175,187,0.75)', fontSize: 11 },
       regions: neighborRegions(neighborNames, true),
     },
     series: [
@@ -236,7 +248,7 @@ function baseOption(neighborNames, reducedMotion) {
         type: 'lines',
         coordinateSystem: 'geo',
         zlevel: 1,
-        lineStyle: { color: C.red, width: 2.5, opacity: 0.85, curveness: 0.18 },
+        lineStyle: { color: C.ember, width: 2.5, opacity: 0.8, curveness: 0.18, shadowColor: 'rgba(226,87,43,0.8)', shadowBlur: 8 },
         data: [],
       },
       {
@@ -252,9 +264,9 @@ function baseOption(neighborNames, reducedMotion) {
           trailLength: 0,
           symbol: 'arrow',
           symbolSize: 9,
-          color: C.red,
+          color: C.glow,
         },
-        lineStyle: { color: C.red, width: 3, opacity: 0.95, curveness: 0.18 },
+        lineStyle: { color: C.ember, width: 3.2, opacity: 1, curveness: 0.18, shadowColor: 'rgba(255,170,90,0.9)', shadowBlur: 12 },
         data: [],
       },
       {
@@ -301,7 +313,7 @@ function baseOption(neighborNames, reducedMotion) {
         zlevel: 4,
         symbolSize: 16,
         rippleEffect: { brushType: 'stroke', scale: 4, period: 3 },
-        itemStyle: { color: C.red, shadowBlur: 10, shadowColor: 'rgba(179,38,30,.5)' },
+        itemStyle: { color: C.ember, shadowBlur: 16, shadowColor: 'rgba(255,170,90,.9)' },
         data: [],
       },
       {
@@ -335,8 +347,8 @@ function nodeData(visitedIds) {
     name,
     value: coord,
     itemStyle: visited
-      ? { color: C.red, borderColor: C.paper, borderWidth: 2 }
-      : { color: C.paper, borderColor: C.inkSoft, borderWidth: 2 },
+      ? { color: C.ember, borderColor: C.glow, borderWidth: 1.5 }
+      : { color: C.night, borderColor: C.moonSoft, borderWidth: 1.5 },
     label: { color: visited ? C.ink : C.inkSoft },
   });
   return [
@@ -450,7 +462,7 @@ export function initStorymap({ hunanGeo, neighborsGeo, reducedMotion }) {
 
         // 地图上画出所选方向
         const target = targets[opt.correct];
-        const color = opt.correct ? C.red : C.ink;
+        const color = opt.correct ? C.ember : '#5E6878';
         chart.setOption({
           series: [
             {

@@ -32,9 +32,28 @@ function initNav() {
   const links = [...document.querySelectorAll('.nav a')];
   const sections = links.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
 
-  const onScroll = () => {
+  // v2：顶栏下方的元素若在“夜行”区块里，顶栏切到夜色；引信进度条跟随整页滚动进度
+  const nightSections = [...document.querySelectorAll('.is-night')];
+  const fuse = document.getElementById('fuseBar');
+  let ticking = false;
+  const update = () => {
+    ticking = false;
     topbar.classList.toggle('is-scrolled', window.scrollY > 10);
+    const probe = topbar.offsetHeight + 1;
+    const onNight = nightSections.some((s) => {
+      const r = s.getBoundingClientRect();
+      return r.top <= probe && r.bottom > probe;
+    });
+    topbar.classList.toggle('on-night', onNight);
+    if (fuse) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      fuse.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    }
   };
+  const onScroll = () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  };
+  window.addEventListener('resize', onScroll);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 

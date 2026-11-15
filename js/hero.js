@@ -27,6 +27,92 @@ const STOPS = [
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/* =============================================================
+ * v2 火星粒子（Canvas 2D）
+ *   · 环境火星：从山脊下方缓缓升起、左右飘、慢慢熄灭（像远处的篝火）
+ *   · 火头火星：跟着行军线的线头喷出，滚动越快喷得越多
+ * 原理：每颗火星 = {x, y, vx, vy, life}；每帧更新位置、减少寿命，用径向渐变画一个发光小点。
+ * 只在首页可见时运行（IntersectionObserver），离开首页就停，省电。
+ * ============================================================= */
+function createEmbers(canvas) {
+  const ctx = canvas.getContext('2d');
+  const sparks = [];
+  let W = 0, H = 0, dpr = 1, running = false, raf = 0;
+  let headX = -1, headY = -1, burst = 0;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function spawn(x, y, fromHead) {
+    sparks.push({
+      x, y,
+      vx: (Math.random() - 0.5) * (fromHead ? 1.6 : 0.4),
+      vy: -(fromHead ? 0.6 + Math.random() * 1.4 : 0.25 + Math.random() * 0.55),
+      life: 1,
+      decay: fromHead ? 0.012 + Math.random() * 0.012 : 0.003 + Math.random() * 0.004,
+      r: fromHead ? 1 + Math.random() * 1.8 : 0.6 + Math.random() * 1.4,
+      wob: Math.random() * Math.PI * 2,
+    });
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    // 环境火星：数量随屏幕宽度变化
+    if (sparks.length < 70 + W / 14 && Math.random() < 0.5) spawn(Math.random() * W, H + 6, false);
+    // 火头火星
+    const n = Math.min(6, 1 + burst);
+    if (headX >= 0) for (let i = 0; i < n; i++) if (Math.random() < 0.6) spawn(headX, headY, true);
+    burst *= 0.9;
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.wob += 0.04;
+      s.x += s.vx + Math.sin(s.wob) * 0.25;
+      s.y += s.vy;
+      s.life -= s.decay;
+      if (s.life <= 0 || s.y < -10) { sparks.splice(i, 1); continue; }
+      const a = s.life;
+      const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
+      g.addColorStop(0, `rgba(255,214,150,${a})`);
+      g.addColorStop(0.35, `rgba(240,120,60,${a * 0.6})`);
+      g.addColorStop(1, 'rgba(226,87,43,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 4, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    raf = requestAnimationFrame(frame);
+  }
+  function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
+  function stop() { running = false; cancelAnimationFrame(raf); }
+
+  resize();
+  window.addEventListener('resize', resize);
+  new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(canvas);
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+  return {
+    /** 线头在画布中的位置（像素），以及这一帧的滚动速度（决定喷多少） */
+    setHead(x, y, speed) { headX = x; headY = y; burst = Math.max(burst, speed); },
+  };
+}
+
+/** v2：把“青春.接过(薪火);”逐字打出来（键盘手感：随机间隔） */
+function typeCode(el, reducedMotion) {
+  if (!el) return;
+  const full = el.textContent;
+  if (reducedMotion) return;
+  el.textContent = '';
+  el.classList.add('is-typing');
+  let i = 0;
+  const tick = () => {
+    el.textContent = full.slice(0, ++i);
+    if (i < full.length) setTimeout(tick, 70 + Math.random() * 90);
+  };
+  setTimeout(tick, 900);
+}
+
 /**
  * v1.1 主视觉插槽：index.html 里 #heroVisual 的 data-src 填了图片路径（如 assets/hero.jpg）才显示。
  * 不自动去猜文件名 —— 猜不到的文件会产生 404 和控制台报错。
@@ -61,6 +147,11 @@ export function initHero({ reducedMotion }) {
   if (!path || !head || !labelLayer) return;
 
   initHeroVisual();
+  typeCode(document.getElementById('heroCode'), reducedMotion);
+  const canvas = document.getElementById('embers');
+  const embers = !reducedMotion && canvas ? createEmbers(canvas) : null;
+  const svg = path.ownerSVGElement;
+  let lastProgress = 0;
 
   const total = path.getTotalLength(); // 路径总长度（SVG 坐标单位）
 
@@ -97,6 +188,18 @@ export function initHero({ reducedMotion }) {
     const p = path.getPointAtLength(total * progress);
     head.setAttribute('cx', p.x);
     head.setAttribute('cy', p.y);
+
+    // v2：把线头的 SVG 坐标换算成画布像素坐标，交给火星粒子
+    if (embers && svg && canvas) {
+      const m = svg.getScreenCTM();
+      const c = canvas.getBoundingClientRect();
+      if (m) {
+        const sx = m.a * p.x + m.c * p.y + m.e - c.left;
+        const sy = m.b * p.x + m.d * p.y + m.f - c.top;
+        embers.setHead(sx, sy, Math.abs(progress - lastProgress) * 400);
+      }
+      lastProgress = progress;
+    }
 
     labels.forEach((label) => {
       const shouldShow = progress >= label.at - 0.001;
