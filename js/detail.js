@@ -216,7 +216,8 @@ async function miniMap(node) {
   if (!echarts || !box) return;
   try {
     const [hunan, neighbors] = await Promise.all(
-      ['../data/hunan.json', '../data/neighbors.json'].map((u) => fetch(u).then((r) => r.json()))
+      ['hunan', 'neighbors'].map((k) =>
+        (window.__XH_DATA && window.__XH_DATA[k]) ? Promise.resolve(window.__XH_DATA[k]) : fetch(`../data/${k}.json`).then((r) => r.json()))
     );
     echarts.registerMap('xiang-mini', { type: 'FeatureCollection', features: [...neighbors.features, ...hunan.features] });
     const chart = echarts.init(box);

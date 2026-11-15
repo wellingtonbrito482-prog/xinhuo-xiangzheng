@@ -113,9 +113,12 @@ export async function initQA({ reducedMotion }) {
 
   // ---- 1. 加载知识库 ----
   try {
-    const res = await fetch('js/data/kb.json');
-    if (!res.ok) throw new Error(res.status);
-    const kb = await res.json();
+    let kb = window.__XH_DATA && window.__XH_DATA.kb;   // 双击打开时用预载数据
+    if (!kb) {
+      const res = await fetch('js/data/kb.json');
+      if (!res.ok) throw new Error(res.status);
+      kb = await res.json();
+    }
     index = buildIndex(kb.entries);
   } catch (err) {
     console.warn('知识库加载失败', err);

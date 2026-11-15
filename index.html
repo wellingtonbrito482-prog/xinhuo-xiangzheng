@@ -20,7 +20,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <!-- 内联 SVG 图标（红色印章“湘”），无需额外文件，也避免 favicon 404 -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23B3261E'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23F4EDE1' font-family='serif' font-weight='bold'%3E%E6%B9%98%3C/text%3E%3C/svg%3E" />
-  <link rel="preload" href="assets/fonts/xinhuo-serif-black.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="v2">
@@ -383,6 +382,10 @@
   <script src="vendor/echarts.min.js"></script>
   <script src="vendor/scrollama.min.js"></script>
   <script src="vendor/qrcode-generator.js"></script>
-  <script type="module" src="js/main.js"></script>
+  <!-- 数据与脚本均以经典 script 加载：双击 index.html（file://）也能直接打开，无需服务器。源码见 js/*.js，打包命令见 README -->
+  <script src="data/hunan.js"></script>
+  <script src="data/neighbors.js"></script>
+  <script src="js/data/kb.js"></script>
+  <script src="js/bundle-main.js"></script>
 </body>
 </html>

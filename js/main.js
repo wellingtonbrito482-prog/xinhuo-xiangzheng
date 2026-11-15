@@ -21,6 +21,10 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 /** 读取 JSON 文件（需要通过 http 服务器访问页面，见 README） */
 async function loadJSON(url) {
+  // 双击打开（file://）时浏览器禁止 fetch，本地数据已由 data/*.js 预先挂到 window.__XH_DATA
+  const key = url.split('/').pop().replace('.json', '');
+  const pre = window.__XH_DATA && window.__XH_DATA[key];
+  if (pre) return pre;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`加载失败：${url}（${res.status}）`);
   return res.json();
