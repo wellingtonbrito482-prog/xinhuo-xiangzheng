@@ -1353,3 +1353,6 @@ input, textarea { caret-color: var(--red); }
 }
 .v2 .storymap .map-caption { background: var(--red); color: #fff; border-radius: 2px; top: 14px; left: 16px; }
 .v2 .storymap .step { border-radius: 3px; }
+
+/* v2.1 新域名较长，二维码下网址允许换行 */
+.qr-url{overflow-wrap:anywhere;}

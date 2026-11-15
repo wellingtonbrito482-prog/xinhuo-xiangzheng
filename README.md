@@ -171,8 +171,8 @@ xinhuo-xiangzheng/
 | 6 | **淡入提速**：未激活卡片不透明度 0.38→0.62、位移 6px、过渡 0.35s；首页标题开场 0.4s、从 0.6 不透明度开始；电报单/接力卡片入场从 0.6 开始、≤0.35s；系统“减少动态效果”时全部关闭。**接力计数器**一加载就显示真实人数（不再从 0 数起），滚到时只做一次轻微放大强调；只有人数变化时才滚动数字。 | `css/style.css`、`js/hero.js`、`js/relay.js` |
 | 7 | **问答区**：大模型设置从弹窗改为左栏底部的 `<details>` 折叠面板；左栏新增“小红能答什么”（五个主题）+ 四个示例问法（复用原来的问题小标签），左右两栏高度基本持平。手机端点示例问题后自动把电报单滚进视野。 | `index.html`、`js/qa.js`、`css/style.css` §20 |
 | 8 | **海报时间线**：底部改为从左到右按时间排列 汝城 1934 → 湘江 1934 → 通道 1934 → 桑植 1935 → 我 今天；站名 36px、年份 26px；1934—1935 段为红色实线，桑植到“我”用金色虚线（跨越近一个世纪的“薪火相传”）。站名、年份从 `nodes.js` 的 `mapLabel`、`date` 自动读取。 | `js/relay.js`（`TIMELINE`） |
-| 9 | **分享卡片**：`description`、`og:*`、`twitter:card`、`theme-color`；`og:image` 指向 `https://iwaopots.github.io/xinhuo-xiangzheng/assets/og.png`（分享平台只认完整网址）。`og.png` 为 1200×630，同站风格，用无头 Chromium 截图生成。详情页也加了同样的 OG 标签。 | `index.html`、`pages/*.html`、`assets/og.png` |
-| 10 | **扫码接力**：接力表单下方和页脚各有一个二维码，指向 `https://iwaopots.github.io/xinhuo-xiangzheng/#relay`；由本地 `vendor/qrcode-generator.js`（MIT）在浏览器里生成 SVG，离线可用，投到大屏也清晰。 | `index.html`、`js/relay.js`（`renderQR`） |
+| 9 | **分享卡片**：`description`、`og:*`、`twitter:card`、`theme-color`；`og:image` 指向 `https://wellingtonbrito482-prog.github.io/xinhuo-xiangzheng/assets/og.png`（分享平台只认完整网址）。`og.png` 为 1200×630，同站风格，用无头 Chromium 截图生成。详情页也加了同样的 OG 标签。 | `index.html`、`pages/*.html`、`assets/og.png` |
+| 10 | **扫码接力**：接力表单下方和页脚各有一个二维码，指向 `https://wellingtonbrito482-prog.github.io/xinhuo-xiangzheng/#relay`；由本地 `vendor/qrcode-generator.js`（MIT）在浏览器里生成 SVG，离线可用，投到大屏也清晰。 | `index.html`、`js/relay.js`（`renderQR`） |
 | 11 | **图片插槽**：详情页读 `nodes.js` 中节点（或其 details 条目）的 `photo: { src, caption, credit, license, sourceUrl }`，有就在页头下方显示一张带图注和出处的主图，没有就什么都不输出；图片加载失败自动隐藏，不留裂图。首页主视觉：把图放进 `assets/`，在 `index.html` 的 `#heroVisual` 上填 `data-src="assets/hero.jpg"` 即显示（淡淡的旧报纸色调压在标题后面）。**不自动猜文件名**，因为猜不到的文件会产生 404 控制台报错。 | `js/detail.js`、`js/hero.js`、`assets/README.md` |
 | 12 | **手机 390×844 全流程**：吸顶地图改为盖在卡片上方（原来半透明卡片会滑到地图标题和播放按钮上面）；卡片在手机上始终不透明；电报单长文本不溢出；接力两个按钮并排不折行；页脚二维码竖排；导航四项一行放得下（极窄屏只留印章）。 | `css/style.css` §23 |
 | — | 关于我们：队名「薪火相传队」，成员与分工（邓文杰：选题策划、前端开发与交互实现；徐辉年：史料整理考证、视觉设计、文案与内容运营；现场讲解与答辩两人共同完成）。 | `index.html` |

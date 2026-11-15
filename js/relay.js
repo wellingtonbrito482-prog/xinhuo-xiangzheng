@@ -298,7 +298,7 @@ function animateCount(node, from, to, reducedMotion) {
 /* ---------------- 二维码（v1.1，现场答辩扫码接力） ---------------- */
 
 /** 线上地址：GitHub Pages。二维码由 vendor/qrcode-generator.js 在本地生成，无需联网 */
-export const RELAY_URL = 'https://iwaopots.github.io/xinhuo-xiangzheng/#relay';
+export const RELAY_URL = 'https://wellingtonbrito482-prog.github.io/xinhuo-xiangzheng/#relay';
 
 /**
  * 把页面上所有 [data-qr] 容器画成二维码（SVG，墨色方块 + 纸色底）
