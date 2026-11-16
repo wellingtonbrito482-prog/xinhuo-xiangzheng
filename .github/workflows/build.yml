@@ -1,0 +1,23 @@
+name: 自动打包（改完源码自动重建 bundle）
+on:
+  push:
+    branches: [main]
+    paths: ['js/**', '!js/bundle-*.js']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npx -y esbuild@0.24.0 js/main.js --bundle --format=iife --target=es2019 --outfile=js/bundle-main.js
+      - run: npx -y esbuild@0.24.0 js/detail.js --bundle --format=iife --target=es2019 --outfile=js/bundle-detail.js
+      - run: node tests/qa-engine.test.mjs
+      - name: 提交重建后的 bundle
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add js/bundle-main.js js/bundle-detail.js
+          git diff --cached --quiet || (git commit -m "自动重建 bundle" && git push)
